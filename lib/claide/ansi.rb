@@ -32,12 +32,13 @@ module CLAide
       #   ANSI.disabled = true
       #   "example".ansi.yellow #=> "example"
       #
+      # 可以对属性做get set 操作
       attr_accessor :disabled
     end
 
     # @return [Hash{Symbol => Fixnum}] The text attributes codes by their
     #         English name.
-    #
+    # 富文本
     TEXT_ATTRIBUTES = {
       :bold       => 1,
       :underline  => 4,
@@ -59,10 +60,12 @@ module CLAide
 
     # Return [String] The escape sequence to reset the graphics.
     #
+    # 重置序列
     RESET_SEQUENCE = "\e[0m"
 
     # @return [Hash{Symbol => Fixnum}] The colors codes by their English name.
     #
+    # 颜色
     COLORS = {
       :black      => 0,
       :red        => 1,
@@ -76,10 +79,11 @@ module CLAide
 
     # Return [String] The escape sequence for the default foreground color.
     #
+    # 默认前景色
     DEFAULT_FOREGROUND_COLOR = "\e[39m"
 
     # Return [String] The escape sequence for the default background color.
-    #
+    #默认背景色
     DEFAULT_BACKGROUND_COLOR = "\e[49m"
 
     # @return [Fixnum] The code of a key given the map.
@@ -93,6 +97,7 @@ module CLAide
     # @raise  If the key is not provided.
     # @raise  If the key is not present in the map.
     #
+    # 查询map里是否包含key
     def self.code_for_key(key, map)
       unless key
         raise ArgumentError, 'A key must be provided'
