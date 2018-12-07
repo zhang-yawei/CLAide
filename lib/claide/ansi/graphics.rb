@@ -63,6 +63,7 @@ module CLAide
       # @param  [Fixnum, Array<Fixnum>] codes
       #         The code(s).
       #
+      # 定义class方法
       def self.graphics_mode(codes)
         codes = Array(codes)
         "\e[#{codes.join(';')}m"

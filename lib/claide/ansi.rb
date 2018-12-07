@@ -97,7 +97,7 @@ module CLAide
     # @raise  If the key is not provided.
     # @raise  If the key is not present in the map.
     #
-    # 查询map里是否包含key
+    # 查询map里是否包含key . 从map里取出value,如果不包含,会抛出错误.
     def self.code_for_key(key, map)
       unless key
         raise ArgumentError, 'A key must be provided'

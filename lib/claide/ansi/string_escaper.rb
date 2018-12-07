@@ -14,11 +14,12 @@ module CLAide
       #         taking care of handling existing sequences for the same
       #         family of attributes (i.e. attributes terminated by the
       #         same sequence).
-      #
+      #包装成   最开始是oepn , 最后是close.   中间的close被替换
       def wrap_in_ansi_sequence(open, close)
         if ANSI.disabled
           self
         else
+          # 替换
           gsub!(close, open)
           insert(0, open).insert(-1, close)
         end
@@ -31,7 +32,9 @@ module CLAide
       #         string.
       #
       def apply(*keys)
+        # .flatten  返回一个扁平化的一维数组
         keys.flatten.each do |key|
+          # 调用key方法
           send(key)
         end
         self
@@ -43,7 +46,9 @@ module CLAide
         #
         # The methods handle nesting of ANSI sequences.
         #
+        # 定义方法名为 key的方法
         define_method key do
+          # 方法体的内容
           open = Graphics.foreground_color(key)
           close = ANSI::DEFAULT_FOREGROUND_COLOR
           wrap_in_ansi_sequence(open, close)
@@ -61,6 +66,9 @@ module CLAide
         end
       end
 
+      # 简直是魔法
+
+
       ANSI::TEXT_ATTRIBUTES.each_key do |key|
         # Defines a method returns a copy of the receiver wrapped in an ANSI
         # sequence for each text attribute (e.g. #bold).
@@ -68,6 +76,7 @@ module CLAide
         # The methods handle nesting of ANSI sequences.
         #
         define_method key do
+          # 修改控制台颜色效果
           open = Graphics.text_attribute(key)
           close_code = TEXT_DISABLE_ATTRIBUTES[key]
           close = Graphics.graphics_mode(close_code)

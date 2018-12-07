@@ -4,6 +4,10 @@ module CLAide
   # This class is used to represent individual arguments to present to
   # the command help banner
   #
+  # command help banner 是否相等
+  # 是否可重复
+  # 是否required
+  #
   class Argument
     # The string used for ellipsis / repeatable arguments in the banner
     #
@@ -11,12 +15,14 @@ module CLAide
 
     # @return [Array<String>]
     #         List of alternate names for the parameters
+    # 只读属性
     attr_reader :names
 
     # @return [Boolean]
     #         Indicates if the argument is required (not optional)
     #
     attr_accessor :required
+
     alias_method :required?, :required
 
     # @return [Boolean]
@@ -24,6 +30,7 @@ module CLAide
     #         times in the command, which is indicated by '...' in the banner)
     #
     attr_accessor :repeatable
+
     alias_method :repeatable?, :repeatable
 
     # @param [String,Array<String>] names
@@ -54,6 +61,8 @@ module CLAide
     #
     # @param [Argument] other the Argument compared against
     #
+    #
+    # 判断相等
     def ==(other)
       other.is_a?(Argument) &&
         names == other.names && required == other.required

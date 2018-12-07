@@ -11,6 +11,7 @@ module CLAide
     # @param  [Object] argv
     #         The object which should be converted to the ARGV class.
     #
+    # 使argv强制转化为ARGV
     def self.coerce(argv)
       if argv.is_a?(ARGV)
         argv
@@ -42,6 +43,8 @@ module CLAide
     #   argv.shift_argument # => 'tea'
     #   argv.remainder      # => ['--no-milk', '--sweetener=honey']
     #
+    #
+    # 余数, 剩余的
     def remainder
       @entries.map do |type, (key, value)|
         case type
@@ -244,7 +247,15 @@ module CLAide
       entry.nil? ? default : entry.last.last
     end
 
+    # Parser模块
     module Parser
+      #
+      # 无破折号  : arg
+      # 有破折号, 无== flag
+      # 有破折号, 有==  option
+      #
+
+
       # @return [Array<Array<Symbol, String, Array>>] A list of tuples for each
       #         parameter, where the first entry is the `type` and the second
       #         entry the actual parsed parameter.
@@ -260,8 +271,10 @@ module CLAide
         entries = []
         copy = argv.map(&:to_s)
         double_dash = false
+        #shift 移除第一个元素, 并且返回第一个元素. 循环
         while argument = copy.shift
           next if !double_dash && double_dash = (argument == '--')
+          # argument不是上破折号. 并且 double_dash == false
           type = double_dash ? :arg : argument_type(argument)
           parsed_argument = parse_argument(type, argument)
           entries << [type, parsed_argument]
@@ -275,14 +288,18 @@ module CLAide
       # @param  [String] argument
       #         The argument to check.
       #
+      # 返回参数的类型
       def self.argument_type(argument)
         if argument.start_with?('--')
           if argument.include?('=')
+            # 双破折号, 并且包含 = .
             :option
           else
+            # 双破折号, 不包含 = .
             :flag
           end
         else
+          # 没有双破折号
           :arg
         end
       end
@@ -304,6 +321,7 @@ module CLAide
         when :flag
           return parse_flag(argument)
         when :option
+          # 去掉破折号.== 进行分割 . 最多返回两个
           return argument[2..-1].split('=', 2)
         end
       end
@@ -314,7 +332,9 @@ module CLAide
       # @param  [String] argument
       #         The flag argument to check.
       #
+      # 解析flag  # 双破折号, 不包含 = .
       def self.parse_flag(argument)
+        # 去掉双破折号
         if argument.start_with?('--no-')
           key = argument[5..-1]
           value = false
